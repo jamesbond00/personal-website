@@ -46,7 +46,8 @@ nav a { display: inline-block; padding: .4rem .3rem; border-bottom: 2px solid tr
 nav a:hover { border-bottom-color: #eee; color: #fff; }
 body:not(:has(:target)) nav a:first-child { border-bottom-color: #eee; color: #fff; }
 body:has(#whoami:target) nav a[href="#whoami"],
-body:has(#projects:target, #traderlab:target) nav a[href="#projects"],
+/* body:has(#projects:target, #traderlab:target) nav a[href="#projects"], */
+body:has(#projects:target, #sed:target) nav a[href="#projects"],
 body:has(#experience:target) nav a[href="#experience"],
 body:has(#stack:target) nav a[href="#stack"],
 body:has(#contact:target) nav a[href="#contact"] { border-bottom-color: #eee; color: #fff; }

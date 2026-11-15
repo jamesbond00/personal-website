@@ -1,9 +1,9 @@
 const commands = new Map([
-  ['help', { output: 'whoami   Profile\nexperience   Trading engineering\nprojects   Project list\ntraderlab   Featured project\nstack   Technical stack\ncontact   Contact links\nclear   Clear this transcript\n\nUse ↑ and ↓ to recall commands.' }],
+  ['help', { output: 'whoami   Profile\nexperience   Trading engineering\nprojects   Project list\nsed   Featured project\nstack   Technical stack\ncontact   Contact links\nclear   Clear this transcript\n\nUse ↑ and ↓ to recall commands.' }],
   ['whoami', { target: 'whoami', output: 'Alexander Khundoev · Electronic Trading Engineer · London, UK' }],
   ['experience', { target: 'experience', output: 'Opening experience.' }],
-  ['projects', { target: 'projects', output: 'TraderLab' }],
-  ['traderlab', { target: 'traderlab', output: 'TraderLab · Experimental trading systems lab' }],
+  ['projects', { target: 'projects', output: 'Smart Enterprise Diagnostics (SED)' }],
+  ['sed', { target: 'sed', output: 'SED · Smart Enterprise Diagnostics' }],
   ['stack', { target: 'stack', output: 'Opening technical stack.' }],
   ['contact', { target: 'contact', output: 'Opening contact.' }],
   ['clear', { clear: true }],

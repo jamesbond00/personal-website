@@ -1,6 +1,6 @@
 ---
 import Terminal from '../components/Terminal.astro';
-import { profile, traderlab } from '../data/profile';
+import { profile, sed } from '../data/profile';
 import '../styles/global.css';
 
 const sections = [
@@ -48,18 +48,6 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
         <nav aria-label="Portfolio sections">
           {sections.map(([id, label], index) => <a href={`#${id}`}><span aria-hidden="true">[{String(index + 1).padStart(2, '0')}] </span>{label}</a>)}
         </nav>
-        <section id="projects" tabindex="-1" aria-labelledby="projects-heading">
-          <h2 class="prompt" id="projects-heading"><span class="sr-only">Projects</span><span aria-hidden="true">$ ls projects/</span></h2>
-          <article id="traderlab" tabindex="-1" class="project" aria-labelledby="traderlab-name">
-            <p class="project-path" aria-hidden="true">└─ ~/projects/<strong>traderlab</strong></p>
-            <div class="project-copy">
-              <div class="project-title"><h3 id="traderlab-name">{traderlab.name}</h3><span class="status">{traderlab.status}</span></div>
-              <p>{traderlab.description}</p>
-              <p class="muted">{traderlab.next}</p>
-              {traderlab.repository && <a href={traderlab.repository}>TraderLab repository ↗</a>}
-            </div>
-          </article>
-        </section>
         <section class="split" id="experience" tabindex="-1" aria-labelledby="experience-heading">
           <h2 class="prompt" id="experience-heading"><span class="sr-only">Experience</span><span aria-hidden="true">$ experience</span></h2>
           <div>{profile.experience.map((paragraph) => <p>{paragraph}</p>)}</div>
@@ -71,6 +59,18 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
         <section class="split" id="contact" tabindex="-1" aria-labelledby="contact-heading">
           <h2 class="prompt" id="contact-heading"><span class="sr-only">Contact</span><span aria-hidden="true">$ cat links.txt</span></h2>
           {links.length ? <ul class="contact-links">{links.map(({ label, href }) => <li><a href={href}>{label}</a></li>)}</ul> : <p class="muted">Contact links coming soon.</p>}
+        </section>
+        <section id="projects" tabindex="-1" aria-labelledby="projects-heading">
+          <h4 class="prompt" id="projects-heading"><span class="sr-only">Projects</span><span aria-hidden="true">$ ls projects/</span></h4>
+          <article id="sed" tabindex="-1" class="project" aria-labelledby="sed-name">
+            <p class="project-path" aria-hidden="true">└─ ~/projects/<strong>sed</strong></p>
+            <div class="project-copy">
+              <div class="project-title"><h3 id="sed-name">{sed.name}</h3><span class="status">{sed.status}</span></div>
+              <p>{sed.description}</p>
+              <p class="muted">{sed.next}</p>
+              {sed.repository && <a href={sed.repository}>SED repository ↗</a>}
+            </div>
+          </article>
         </section>
         <Terminal />
       </main>

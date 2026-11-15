@@ -4,10 +4,10 @@ A single-page Astro portfolio with a monochrome terminal and browser-local comma
 
 ## Local development
 
-Use Node.js 22 or later.
+Use Node.js 24 LTS. The installed Astro version requires Node.js 22.23.4 or newer. If you use nvm, run `nvm install` and `nvm use` from this directory.
 
 ```sh
-npm install
+npm ci
 npm run dev
 npm test
 npm run build
