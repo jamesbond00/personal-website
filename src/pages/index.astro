@@ -1,0 +1,79 @@
+---
+import Terminal from '../components/Terminal.astro';
+import { profile, traderlab } from '../data/profile';
+import '../styles/global.css';
+
+const sections = [
+  ['whoami', 'About'], ['experience', 'Experience'], ['projects', 'Projects'],
+  ['stack', 'Stack'], ['contact', 'Contact'],
+];
+const title = `${profile.name} | ${profile.headline}`;
+const links = profile.links.filter(({ href }) => href);
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={profile.introduction} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={profile.introduction} />
+    <meta property="og:type" content="website" />
+    {canonical && <link rel="canonical" href={canonical.href} />}
+    <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip" href="#whoami">Skip to profile</a>
+    <div class="window">
+      <header class="window-bar">
+        <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>alexander@khundoev:~</span>
+        <span class="window-path">~/portfolio</span>
+      </header>
+      <main>
+        <section id="whoami" tabindex="-1" aria-labelledby="profile-name" class="hero">
+          <div class="hero-top">
+            <div>
+              <p class="prompt">$ whoami</p>
+              <h1 id="profile-name">{profile.name}<span class="cursor" aria-hidden="true"></span></h1>
+            </div>
+            <p class="location"><span aria-hidden="true">// </span>{profile.location}</p>
+          </div>
+          <p class="headline">{profile.headline}</p>
+          <ul class="focus" aria-label="Technical focus">{profile.focus.map((item) => <li>{item}</li>)}</ul>
+          <p class="intro">{profile.introduction}</p>
+        </section>
+        <nav aria-label="Portfolio sections">
+          {sections.map(([id, label], index) => <a href={`#${id}`}><span aria-hidden="true">[{String(index + 1).padStart(2, '0')}] </span>{label}</a>)}
+        </nav>
+        <section id="projects" tabindex="-1" aria-labelledby="projects-heading">
+          <h2 class="prompt" id="projects-heading"><span class="sr-only">Projects</span><span aria-hidden="true">$ ls projects/</span></h2>
+          <article id="traderlab" tabindex="-1" class="project" aria-labelledby="traderlab-name">
+            <p class="project-path" aria-hidden="true">└─ ~/projects/<strong>traderlab</strong></p>
+            <div class="project-copy">
+              <div class="project-title"><h3 id="traderlab-name">{traderlab.name}</h3><span class="status">{traderlab.status}</span></div>
+              <p>{traderlab.description}</p>
+              <p class="muted">{traderlab.next}</p>
+              {traderlab.repository && <a href={traderlab.repository}>TraderLab repository ↗</a>}
+            </div>
+          </article>
+        </section>
+        <section class="split" id="experience" tabindex="-1" aria-labelledby="experience-heading">
+          <h2 class="prompt" id="experience-heading"><span class="sr-only">Experience</span><span aria-hidden="true">$ experience</span></h2>
+          <div>{profile.experience.map((paragraph) => <p>{paragraph}</p>)}</div>
+        </section>
+        <section class="split" id="stack" tabindex="-1" aria-labelledby="stack-heading">
+          <h2 class="prompt" id="stack-heading"><span class="sr-only">Technical stack</span><span aria-hidden="true">$ stack</span></h2>
+          <dl>{profile.stack.map(({ label, tools }) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl>
+        </section>
+        <section class="split" id="contact" tabindex="-1" aria-labelledby="contact-heading">
+          <h2 class="prompt" id="contact-heading"><span class="sr-only">Contact</span><span aria-hidden="true">$ cat links.txt</span></h2>
+          {links.length ? <ul class="contact-links">{links.map(({ label, href }) => <li><a href={href}>{label}</a></li>)}</ul> : <p class="muted">Contact links coming soon.</p>}
+        </section>
+        <Terminal />
+      </main>
+    </div>
+  </body>
+</html>

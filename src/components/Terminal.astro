@@ -1,0 +1,93 @@
+<section class="terminal" aria-label="Interactive terminal" data-terminal hidden>
+  <div class="terminal-bar">
+    <h2>Interactive terminal</h2>
+    <button type="button" data-help>Run help</button>
+  </div>
+  <div class="transcript" data-transcript></div>
+  <p class="sr-only" role="status" data-announcement></p>
+  <form>
+    <label for="command"><span aria-hidden="true">$</span><span class="sr-only">Terminal command</span></label>
+    <input id="command" type="text" maxlength="120" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Type help" />
+    <button type="submit">Run <span aria-hidden="true">↵</span></button>
+  </form>
+</section>
+
+<script>
+  import { CommandHistory, parseCommand } from '../data/commands.mjs';
+
+  const terminal = document.querySelector<HTMLElement>('[data-terminal]');
+  const form = terminal?.querySelector('form');
+  const input = terminal?.querySelector('input');
+  const transcript = terminal?.querySelector<HTMLElement>('[data-transcript]');
+  const announcement = terminal?.querySelector<HTMLElement>('[data-announcement]');
+  const help = terminal?.querySelector('[data-help]');
+
+  if (terminal && form && input && transcript && announcement && help) {
+    const history = new CommandHistory();
+    terminal.hidden = false;
+
+    const run = (value: string) => {
+      const command = value.trim();
+      const result = parseCommand(command);
+      if (!result) return;
+
+      history.add(command);
+      input.value = '';
+      if (result.clear) {
+        transcript.replaceChildren();
+        announcement.textContent = 'Terminal transcript cleared.';
+        return;
+      }
+
+      const entry = document.createElement('div');
+      const prompt = document.createElement('p');
+      const output = document.createElement('p');
+      prompt.textContent = `$ ${command}`;
+      output.textContent = result.output ?? '';
+      entry.append(prompt, output);
+      transcript.append(entry);
+      if (transcript.childElementCount > 30) transcript.firstElementChild?.remove();
+      transcript.scrollTop = transcript.scrollHeight;
+      announcement.textContent = `${command}. ${output.textContent}`;
+
+      if (result.target) {
+        const target = document.getElementById(result.target);
+        if (target) {
+          window.location.hash = target.id;
+          target.focus({ preventScroll: true });
+          target.scrollIntoView({ block: 'start' });
+        }
+      }
+    };
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      run(input.value);
+    });
+    input.addEventListener('keydown', (event) => {
+      if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+      event.preventDefault();
+      input.value = history.move(event.key === 'ArrowUp' ? -1 : 1, input.value);
+    });
+    help.addEventListener('click', () => {
+      run('help');
+      input.focus();
+    });
+  }
+</script>
+
+<style>
+  .terminal { margin-top: 1.35rem; border: 1px solid #666; background: #0b0b0b; }
+  .terminal-bar { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .4rem .7rem; border-bottom: 1px solid #444; background: #111; }
+  h2 { color: #c8c8c8; font-size: .84rem; font-weight: 500; }
+  .transcript { max-height: 14rem; overflow: auto; overflow-wrap: anywhere; font-size: .83rem; white-space: pre-wrap; }
+  .transcript:not(:empty) { padding: .6rem .75rem; border-bottom: 1px solid #444; }
+  .transcript :global(div + div) { margin-top: .5rem; }
+  .transcript :global(p + p) { color: #bcbcbc; }
+  form { display: flex; gap: .55rem; align-items: center; padding: .5rem .7rem; }
+  input { flex: 1; width: 0; min-width: 0; background: transparent; color: #eee; border: 0; padding: .24rem .15rem; font-size: 1rem; }
+  input::placeholder { color: #a9a9a9; }
+  button { background: #171717; color: #eee; border: 1px solid #777; padding: .2rem .45rem; font-size: .8rem; cursor: pointer; }
+  button:hover { background: #252525; }
+</style>
